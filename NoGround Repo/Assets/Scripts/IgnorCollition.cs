@@ -10,7 +10,6 @@ public class IgnorCollition : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        print(Layer_1);
         Physics2D.IgnoreLayerCollision(Layer_1,Layer_2);
     }
 }

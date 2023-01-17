@@ -9,10 +9,13 @@ public class Drager : MonoBehaviour
       public event EventHandler OnHover;
       public event EventHandler OnSelect;
       public event EventHandler OnDeSelect;
+      public Action<TargetJoint2D?> updateConected;
+
       Vector3 WorldPos;
       TargetJoint2D m_targetJoint;
       [SerializeField] ContactFilter2D CFilter;
-      [SerializeField] LayerMask TargetMask;
+
+      [Header("TargetJoint Options")]
       [SerializeField][Range(0, 100)] float m_damping = 0.1f;
       [SerializeField][Range(0, 100)] float m_frequency = 100;
       [SerializeField] float m_maxForce = 10000;
@@ -28,20 +31,20 @@ public class Drager : MonoBehaviour
                   if (Physics2D.OverlapPoint(WorldPos, CFilter, contactList) == 0) return;
                   var Overlapcollider = contactList[0];
                   if (!Overlapcollider) return;
-                // RemoveOldTargetJoints(Overlapcollider);
-                  OnSelect?.Invoke(Overlapcollider, new SelectInfo(Overlapcollider.gameObject,Overlapcollider,null,WorldPos));
-                  AddTargetJoint(Overlapcollider);
-
+                  Remove_All_TargetsOn(Overlapcollider); updateConected?.Invoke(m_targetJoint);
+                  OnSelect?.Invoke(Overlapcollider, new SelectInfo(Overlapcollider.gameObject, Overlapcollider, null, WorldPos));
+                  Add_Tempt_TargetJoint(Overlapcollider);
+                  updateConected?.Invoke(m_targetJoint);
             }
             if (Input.GetMouseButtonUp(0))
             {
                   if (!m_targetJoint) return;
-                  var info = new SelectInfo(m_targetJoint.gameObject, m_targetJoint.GetComponent<Collider2D>(), m_targetJoint, WorldPos);
-                  OnDeSelect?.Invoke(m_targetJoint, info);
-                  RemoveTargetJoint();
+                  OnDeSelect?.Invoke(m_targetJoint, new SelectInfo(m_targetJoint.gameObject, m_targetJoint.GetComponent<Collider2D>(), m_targetJoint, WorldPos));
+                  Remove_Tempt_TargetJoint();
+                  updateConected?.Invoke(m_targetJoint);
             }
 
-            void AddTargetJoint(Collider2D Overlapcollider)
+            void Add_Tempt_TargetJoint(Collider2D Overlapcollider)
             {
                   var body = Overlapcollider.attachedRigidbody;
                   if (!body) return;
@@ -49,7 +52,7 @@ public class Drager : MonoBehaviour
                   body.GetComponent<Hand>();
                   m_targetJoint.frequency = m_frequency;
                   m_targetJoint.dampingRatio = m_damping;
-                  m_targetJoint.maxForce=m_maxForce;
+                  m_targetJoint.maxForce = m_maxForce;
                   //inverse form point یعنی پوزیشتی که به تو میدهم را تبدیل به لوکال خودت کن
                   m_targetJoint.anchor = m_targetJoint.transform.InverseTransformPoint(WorldPos);
             }
@@ -60,16 +63,15 @@ public class Drager : MonoBehaviour
             }
       }
 
-      private static void RemoveOldTargetJoints(Collider2D Overlapcollider)
+      void Remove_All_TargetsOn(Collider2D collider)
       {
-            var OldTargets = Overlapcollider.transform.GetComponents<TargetJoint2D>();
+            var OldTargets = collider.transform.GetComponents<TargetJoint2D>();
             foreach (var target in OldTargets)
             {
                   Destroy(target);
             }
       }
-
-      private void RemoveTargetJoint()
+      private void Remove_Tempt_TargetJoint()
       {
             var leftOver = m_targetJoint.attachedRigidbody.GetComponent<TargetJoint2D>();
             if (leftOver) Destroy(leftOver);
@@ -79,20 +81,22 @@ public class Drager : MonoBehaviour
 
       public Collider2D HoverSensor()
       {
-            Collider2D overlapCollider = Physics2D.OverlapPoint(WorldPos, TargetMask);
+            Collider2D overlapCollider = Physics2D.OverlapPoint(WorldPos, -1);
             if (!overlapCollider) return null;
-            OnHover?.Invoke(overlapCollider, EventArgs.Empty);
+            OnHover?.Invoke(this, new SelectInfo(overlapCollider.gameObject, overlapCollider, overlapCollider.gameObject.GetComponent<TargetJoint2D>(), WorldPos));
+
+            updateConected?.Invoke(m_targetJoint);
             return overlapCollider;
       }
 
       #region Gui
-      private void OnGUI()
-      {
-            GUILayout.BeginHorizontal();
-            var size = GUI.skin.box.CalcSize(new GUIContent(WorldPos.ToString()));
-            GUILayout.Box(WorldPos.ToString(), GUILayout.Width(size.x + 5), GUILayout.Height(size.y + 5));
-            GUILayout.EndHorizontal();
-      }
+      // private void OnGUI()
+      // {
+      //       GUILayout.BeginHorizontal();
+      //       var size = GUI.skin.box.CalcSize(new GUIContent(WorldPos.ToString()));
+      //       GUILayout.Box(WorldPos.ToString(), GUILayout.Width(size.x + 5), GUILayout.Height(size.y + 5));
+      //       GUILayout.EndHorizontal();
+      // }
       #endregion
 
 }
