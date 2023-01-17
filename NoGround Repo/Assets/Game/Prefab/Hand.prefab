@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 9082374131010062310}
   - component: {fileID: 3422215760437173639}
   - component: {fileID: 3071268954637582248}
-  m_Layer: 0
+  - component: {fileID: 8718662123296160563}
+  m_Layer: 7
   m_Name: Fingers
   m_TagString: Untagged
   m_Icon: {fileID: -5938655980376293919, guid: 0000000000000000d000000000000000, type: 0}
@@ -47,10 +48,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_Mass: 2
+  m_LinearDrag: 1
+  m_AngularDrag: 1
+  m_GravityScale: 10
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -93,9 +94,21 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.36545157, y: 0.024612188}
+  m_Offset: {x: 0.36545157, y: 0.027572751}
   serializedVersion: 2
-  m_Radius: 0.41580176
+  m_Radius: 0.75035775
+--- !u!114 &8718662123296160563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 849524091048531653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca91d79501106324780793aa4512b9cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2542178283014473999
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,7 +135,7 @@ Transform:
   m_GameObject: {fileID: 2542178283014473999}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.0138001, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 0.3, z: 1}
+  m_LocalScale: {x: 2, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8327956154209322520}
@@ -227,10 +240,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_Mass: 2
+  m_LinearDrag: 1
+  m_AngularDrag: 1
+  m_GravityScale: 10
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -286,7 +299,7 @@ Transform:
   m_GameObject: {fileID: 4123266204765758812}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.977, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 0.3, z: 1}
+  m_LocalScale: {x: 2, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8815527520537053346}
@@ -391,10 +404,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_Mass: 2
+  m_LinearDrag: 1
+  m_AngularDrag: 1
+  m_GravityScale: 10
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -434,7 +447,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6590078452887191454}
   - component: {fileID: 2738642633692012363}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Fingers_Sprit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -450,7 +463,7 @@ Transform:
   m_GameObject: {fileID: 8900162430826739456}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.36080003, y: 0.027999997, z: 0}
-  m_LocalScale: {x: 0.77256626, y: 0.77256626, z: 0.77256626}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1035134635103945378}

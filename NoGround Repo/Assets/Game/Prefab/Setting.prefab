@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5376177117413873707}
   - component: {fileID: 5376177117413873706}
   - component: {fileID: 8829534896196115170}
+  - component: {fileID: 186610157}
   m_Layer: 0
   m_Name: Setting
   m_TagString: Untagged
@@ -47,22 +48,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CFilter:
     useTriggers: 0
-    useLayerMask: 0
+    useLayerMask: 1
     useDepth: 0
     useOutsideDepth: 0
     useNormalAngle: 0
     useOutsideNormalAngle: 0
     layerMask:
       serializedVersion: 2
-      m_Bits: 64
+      m_Bits: 128
     minDepth: 0
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
+  TargetMask:
+    serializedVersion: 2
+    m_Bits: 2147483647
   m_damping: 0.8
   m_frequency: 2
-  m_maxForce: 10000
-  DebugLine: 1
+  m_maxForce: 3000
+  DebugLine: 0
 --- !u!114 &8829534896196115170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,9 +79,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3671ee24d2c6caf449f21a4c233ddacd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Layer_1:
-    serializedVersion: 2
-    m_Bits: 64
-  Layer_2:
-    serializedVersion: 2
-    m_Bits: 64
+  Layer_1: 7
+  Layer_2: 6
+--- !u!114 &186610157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5376177117413873685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff351d86d368b5b48a6e7363ec6b1525, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  List_Fa:
+  - "\u0636\u0635\u0636\u0641\u062B\u0644\u0644"
+  - "\u0628\u0627\u0628\u0627\u0634\u0633\u0634\u0633\u0634\u0633"
+  - asasasaqq
+  - "\u0634\u0633\u0634\u0635\u0633\u0636\u0635\u0636"
+  - "\u0633\u0634\u0633\u0634\u0633\u0633\u0634"
+  - "\u0633\u0634\u0633\u0634\u0633\u0634\u0635\u0636\u0635\u0636\u0642\u0641"
+  List_En:
+  - asa
+  - as
+  - 
+  - as
+  - asas
+  - asasa

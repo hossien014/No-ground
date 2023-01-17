@@ -5,23 +5,24 @@ using System.Collections.Generic;
 public class DialogueTool : EditorWindow
 {
       Vector2 scorllPos;
-      Texture Header_Img ;
-
+      Texture Header_Img;
       [MenuItem("NoGround/DiolgoTool")]
       private static void ShowWindow()
       {
             var window = GetWindow<DialogueTool>();
             window.titleContent = new GUIContent("DiolgoTool");
             window.Show();
+
       }
       private void OnGUI()
       {
-            Header_Img = Resources.Load("allhe")as Texture;
+            Header_Img = Resources.Load("allhe") as Texture;
             GUIStyle Header_S = SetHeadrStyle();
-
+            
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Save", GUILayout.Width(50), GUILayout.Height(50)))
             {
+
                   FindObjectOfType<DialogueColector>().SaveDialogues("Dialogue");
             }
             if (GUILayout.Button("Load", GUILayout.Width(50), GUILayout.Height(50)))

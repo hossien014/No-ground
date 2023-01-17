@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
+using System.Linq;
+
 [ExecuteAlways]
 
 public enum D_Language { En, Fa };
@@ -59,10 +61,10 @@ public class DialogueColector : MonoBehaviour
             var m_Path = GetPath(name);
             Debug.Log($"Dialogues  in {m_Path}");
             var Json = File.ReadAllText(m_Path);
-            var Dict_Json = JsonConvert.DeserializeObject<Dictionary < D_Language, List< string >>>(Json);
+            var Dict_Json = JsonConvert.DeserializeObject<Dictionary<D_Language, List<string>>>(Json);
 
-            List_En =Dict_Json[D_Language.En];
-            List_Fa =Dict_Json[D_Language.Fa];
+            List_En = Dict_Json[D_Language.En];
+            List_Fa = Dict_Json[D_Language.Fa];
       }
 
 
