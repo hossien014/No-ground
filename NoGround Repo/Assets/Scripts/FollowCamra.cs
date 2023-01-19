@@ -33,10 +33,10 @@ public class FollowCamra : MonoBehaviour
       {
             DistanceFormPlayer = Vector3.Distance(transform.position, player.position);
             ModifyedPos = player.position;
-            Lock_Y_Axis();
-            Lock_X_Axis();
-            X_Limitation();
-            Y_Limitation();
+          //  Lock_Y_Axis();
+          //  Lock_X_Axis();
+          //  X_Limitation();
+          //  Y_Limitation();
            // ApplyMaxDistance();
             Joint.target = new Vector3(ModifyedPos.x, ModifyedPos.y);
 

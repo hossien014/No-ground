@@ -11,11 +11,12 @@ public class LevelManger : MonoBehaviour
 {
       [SerializeField] Player player;
       [SerializeField] Level CurrentLevel;
-      [SerializeField] Vector2Int CurrentLevel_key;
+      Vector2Int CurrentLevel_key;
 
       [SerializeField] Dictionary<Vector2Int, Level> All_Levels_prefabs;
       Dictionary<Vector2Int, Level> Active_Levels;
       #region Deboging
+      [SerializeField] List<Level> L1 = new List<Level>();
       string d1 = "";
       string d2 = "";
       string d3 = "";
@@ -25,23 +26,62 @@ public class LevelManger : MonoBehaviour
             Active_Levels = new Dictionary<Vector2Int, Level>();
             player = FindObjectOfType<Player>();
             All_Levels_prefabs = GetAll_Levels_ForemResources();
+            if (Active_Levels.Count == 0) Active_Levels = GetActiceLevels_dict();
 
       }
       private void Start()
       {
-            Updat_Scene_Levels();
+            Updat_Scene();
       }
 
       private void Update()
       {
             if (GetCurrentLevel_Key() != CurrentLevel_key)
             {
-                  Updat_Scene_Levels();
+                  Updat_Scene();
                   CurrentLevel_key = GetCurrentLevel_Key();
-                  print("as");
 
             }
       }
+      private void Updat_Scene()
+      {
+            SetCurrentLevle();
+            Dictionary<Vector2Int, Level> NewActiveList = new Dictionary<Vector2Int, Level>();
+            var Dirctions = _Utils.DirctionArray8_vector2();
+            Dictionary<Vector2Int, Level> NewActive_Levels_List = new Dictionary<Vector2Int, Level>();
+            NewActive_Levels_List.Add(CurrentLevel.Key, CurrentLevel);
+            RemoveOldAndSpawnNewLevels(Dirctions, NewActive_Levels_List);
+      }
+
+      private void RemoveOldAndSpawnNewLevels(Vector2Int[] Dirctions, Dictionary<Vector2Int, Level> NewActive_Levels_List)
+      {
+            foreach (var Dirction in Dirctions)
+            {
+                  Level lvl;
+                  var tmptKey = Dirction + CurrentLevel.Key;
+                  if (All_Levels_prefabs.TryGetValue(tmptKey, out lvl))
+                  {
+                        if (Active_Levels.ContainsKey(tmptKey))
+                        {
+                              NewActive_Levels_List.Add(tmptKey, Active_Levels[tmptKey]);
+                        }
+                        else
+                        {
+                              var newLevel = Instantiate(lvl, transform, false);
+                              Active_Levels.Add(newLevel.Key, newLevel);
+                              NewActive_Levels_List.Add(newLevel.Key, newLevel);
+                        }
+
+                  }
+            }
+            foreach (var item in Active_Levels)
+            {
+                  if (NewActive_Levels_List.ContainsKey(item.Key)) continue;
+                  Destroy(item.Value.gameObject);
+            }
+            Active_Levels = NewActive_Levels_List;
+      }
+
       Vector2Int GetCurrentLevel_Key()
       {
             var levels_Scale = new Vector3(160, 100, 0);
@@ -52,57 +92,11 @@ public class LevelManger : MonoBehaviour
             return CurrentLevelPos;
 
       }
-      public void Updat_Scene_Levels()
-      {
-            if (Active_Levels.Count == 0) Active_Levels = GetActiceLevels_dict();
 
-            SetCurrentLevle();
-            var NewActiveLevels = MakeNewActiveLevel_dic();
-            var SpawnList = Spawn_New_Levels(NewActiveLevels);
-            Remove_OutOfRang_levels(NewActiveLevels);
-            Active_Levels = NewActiveLevels;
-      }
       private Dictionary<Vector2Int, Level> GetActiceLevels_dict() => FindObjectsOfType<Level>().ToDictionary(x => x.Key);
-      private void SetCurrentLevle() => CurrentLevel = Active_Levels[GetCurrentLevel_Key()];
-      private Dictionary<Vector2Int, Level> MakeNewActiveLevel_dic()
-      {
-            Dictionary<Vector2Int, Level> NewActiveList = new Dictionary<Vector2Int, Level>();
-            var Dirctions = _Utils.DirctionArray8_vector2();
-            foreach (var Dirction in Dirctions)
-            {
-                  Level lvl;
-                  if (All_Levels_prefabs.TryGetValue(Dirction + CurrentLevel.Key, out lvl))
-                  {
-                        
-                        NewActiveList.Add(lvl.Key, lvl);
-                  }
-            }
-            NewActiveList.Add(CurrentLevel.Key, CurrentLevel);
-            return NewActiveList;
-      }
-      private List<Level> Spawn_New_Levels(Dictionary<Vector2Int, Level> NewActiveLevels)
-      {
-            List<Level> SpawnList = new List<Level>();
-            foreach (var lvl in NewActiveLevels)
-            {
-                  if (!Active_Levels.ContainsKey(lvl.Key))
-                  {
-                        SpawnList.Add(lvl.Value);
-                        All_Levels_prefabs.TryGetValue(lvl.Key, out Level Level_ToSpawn);
-                        var pos = new Vector3(Level_ToSpawn.Key.x, Level_ToSpawn.Key.y, 0);
-                        Instantiate(Level_ToSpawn, transform, false);
-                  }
-            }
-            return SpawnList;
-      }
-      private void Remove_OutOfRang_levels(Dictionary<Vector2Int, Level> NewActiveLevels_dict)
-      {
-            foreach (var Level in Active_Levels)
-            {
-                  if (NewActiveLevels_dict.ContainsKey(Level.Key)) continue;
-                  Destroy(Level.Value.gameObject);
-            }
-      }
+      private void SetCurrentLevle() => CurrentLevel = (Active_Levels.ContainsKey(GetCurrentLevel_Key())) ? Active_Levels[GetCurrentLevel_Key()] : CurrentLevel;
+
+
       private Dictionary<Vector2Int, Level> GetAll_Levels_ForemResources()
       {
             var Level_OBjs = Resources.LoadAll("LevelPrefab");
