@@ -217,9 +217,22 @@ namespace Abed.Utils
                   dirctions[6] = new Vector3(-1, -1, 0); //down left
                   return dirctions;
             }
+            public static Vector2Int[] DirctionArray8_vector2()
+            {
+                  Vector2Int[] dirctions = new Vector2Int[8];
+                  dirctions[0] = new Vector2Int(1, 0);  //right
+                  dirctions[1] = new Vector2Int(0, 1);  //up
+                  dirctions[2] = new Vector2Int(-1, 0); //left
+                  dirctions[3] = new Vector2Int(0, -1); //down
+
+                  dirctions[4] = new Vector2Int(1, 1); //up right
+                  dirctions[5] = new Vector2Int(1, -1); //down right
+                  dirctions[6] = new Vector2Int(-1, 1); //up left
+                  dirctions[7] = new Vector2Int(-1, -1); //down left
+                  return dirctions;
+            }
             public static Vector3 RoundVector(this Vector3 vector)
             {
-
                   var roundVector = new Vector3(Mathf.RoundToInt(vector.x), Mathf.RoundToInt(vector.y), Mathf.RoundToInt(vector.z));
                   return roundVector;
             }

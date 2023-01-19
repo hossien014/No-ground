@@ -105,10 +105,10 @@ public class Player : MonoBehaviour
       {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
       }
-      private void OnGUI()
-      {
-            GUILayout.BeginHorizontal();
-            GUILayout.Box($"{conectedHands.Count} nuber of conetect hands");
-            GUILayout.EndHorizontal();
-      }
+      // private void OnGUI()
+      // {
+      //       GUILayout.BeginHorizontal();
+      //       GUILayout.Box($"{conectedHands.Count} nuber of conetect hands");
+      //       GUILayout.EndHorizontal();
+      // }
 }
