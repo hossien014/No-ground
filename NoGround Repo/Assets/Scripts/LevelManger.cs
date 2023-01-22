@@ -43,8 +43,15 @@ public class LevelManger : MonoBehaviour, ISaveble
       {
             if (!Active_Levels.ContainsKey(StartKey))
             {
-                  var start_levle = Instantiate(All_Levels_prefabs[StartKey], transform, false);
-                  Active_Levels.Add(start_levle.Key, start_levle);
+                  try
+                  {
+                        var start_levle = Instantiate(All_Levels_prefabs[StartKey], transform, false);
+                        Active_Levels.Add(start_levle.Key, start_levle);
+                  }
+                  catch (Exception ee)
+                  {
+                        d.w(ee.Message);
+                  }
             }
             Update_Scene(StartKey);
       }

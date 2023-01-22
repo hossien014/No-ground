@@ -4,12 +4,13 @@ using UnityEngine;
 [SelectionBase]
 public class CheckPoint : MonoBehaviour
 {
-      private void OnTriggerEnter2d(Collider other)
-      {
-            //save player 
-            if (other.tag != "Player") return;
-            FindObjectOfType<savingSystem>().save("noGroundSave");
-            Destroy(this.gameObject);
 
+      private void OnTriggerEnter2D(Collider2D other)
+      {
+            if (other.tag == "Player")
+            {
+                  FindObjectOfType<savingSystem>().save("noGroundSave");
+                  Destroy(this.gameObject);
+            }
       }
 }

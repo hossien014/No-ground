@@ -63,7 +63,7 @@ public class savingSystem : MonoBehaviour
                         }
                   }
             }
-            d.w(path + "saved");
+            d.w(path + "Loaded");
       }
 
       private string GetPath(string filename) => Path.Combine(Application.persistentDataPath, filename + ".txt");
