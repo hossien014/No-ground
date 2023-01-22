@@ -11,6 +11,8 @@ public class FollowCamra : MonoBehaviour
       [SerializeField] bool Is_X_Locked;
       [SerializeField] Transform player;
       [SerializeField] float MaxDistance = 20;
+      [SerializeField] bool IsMouse = true;
+      [SerializeField] float MaxMouseDistance;
 
       [Header("ForbiddenArea")]
       [SerializeField] bool Is_X_limited;
@@ -27,18 +29,32 @@ public class FollowCamra : MonoBehaviour
 
       void Start()
       {
-            current_Frequencey = Joint.frequency;
+            Joint.frequency = current_Frequencey;
       }
       void Update()
       {
-            DistanceFormPlayer = Vector3.Distance(transform.position, player.position);
-            ModifyedPos = player.position;
-          //  Lock_Y_Axis();
-          //  Lock_X_Axis();
-          //  X_Limitation();
-          //  Y_Limitation();
-           // ApplyMaxDistance();
+            if (Application.isEditor)
+            {
+                  transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -40);
+            }
+
+            // DistanceFormPlayer = Vector3.Distance(transform.position, player.position);
+            ModifyedPos = player.localPosition;
+            Lock_Y_Axis();
+            Lock_X_Axis();
+            X_Limitation();
+            Y_Limitation();
+            ApplyMaxDistance();
+
             Joint.target = new Vector3(ModifyedPos.x, ModifyedPos.y);
+
+      }
+
+      private void followMouse()
+      {
+            var worldpos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            if (Vector3.Distance(worldpos, player.position) > MaxMouseDistance) ModifyedPos = transform.position;
+            else ModifyedPos = worldpos;
 
       }
 

@@ -229,6 +229,9 @@ namespace Abed.Utils
                   dirctions[5] = new Vector2Int(1, -1); //down right
                   dirctions[6] = new Vector2Int(-1, 1); //up left
                   dirctions[7] = new Vector2Int(-1, -1); //down left
+
+
+
                   return dirctions;
             }
             public static Vector3 RoundVector(this Vector3 vector)
@@ -266,7 +269,15 @@ namespace Abed.Utils
             {
                   return Camera.main.ScreenToWorldPoint(Input.mousePosition);
             }
-
+            ///  <summary>
+            /// موقیت لوکال را میگرد و آن را تبدل به گلوبال می کند
+            ///</summary>
+            public static Vector3 GetWorldPoint(Transform parent, Vector3 localPoint)
+            {
+                  var scale = parent.localScale;
+                  var P_Pos = parent.position;
+                  return new Vector3(localPoint.x * scale.x + P_Pos.x, localPoint.y * scale.y + P_Pos.y);
+            }
       }
 
 

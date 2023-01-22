@@ -2,9 +2,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Abed.Utils;
+using System.Linq;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, ISaveble
 {
       Action onFall;
       Vector2 m_worlPos;
@@ -14,6 +16,9 @@ public class Player : MonoBehaviour
       [SerializeField] ContactFilter2D RockFilter;
       [SerializeField] GameObject hand_R, hand_L, leg_R, legL;
       List<GameObject> HandList = new List<GameObject>();
+      Tag _tag = Tag.Player;
+      [SerializeField] Level currentLevel;
+      [SerializeField] Vector2Int m_currentLevelKey;
 
       int numberOfHand;
       [SerializeField] List<GameObject> conectedHands = new List<GameObject>();
@@ -33,6 +38,13 @@ public class Player : MonoBehaviour
       }
       private void Start()
       {
+            m_currentLevelKey = FindObjectOfType<LevelManger>().GetCurrentLevel_Key();
+            // currentLevel = FindObjectOfType<LevelManger>().GetCurrentLevle(currentLevelKey);
+            DragerInitiation();
+      }
+
+      private void DragerInitiation()
+      {
             UpdatConectedHandList(null);
             _drager.updateConected += UpdatConectedHandList;
             _drager.OnDeSelect += ConectHandToRock;
@@ -42,6 +54,16 @@ public class Player : MonoBehaviour
                   UpdatConectedHandList(info.Tmep_targetjoint);
             };
       }
+
+      //در ابتدای بازی پوزیشن پلیر را  به استارت پونیت می برد
+      public void UpdatPlayerPos(Level p)
+      {
+            currentLevel = p;
+            var offset = new Vector3(8.2f, -16.1f);
+            var startPos = _Utils.GetWorldPoint(currentLevel.StartNode.transform, offset);
+            transform.position = startPos;
+      }
+
       private void ConectHandToRock(object TargetJoint2D_Obj, EventArgs e)
       {
             var info = e as SelectInfo;
@@ -101,10 +123,23 @@ public class Player : MonoBehaviour
             }
       }
 
-      void ReLoadScene()
+      public void CaptureState(out object objectToSave, out Tag tag)
       {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            var key = new SerializableVector3 { x = m_currentLevelKey.x, y = m_currentLevelKey.y, z = 0 };
+            objectToSave = key;
+            tag = Tag.Player;
       }
+
+      public void RestoreState(object savedObject)
+      {
+            var key = (savedObject as SerializableVector3).ToVector();
+            m_currentLevelKey = new Vector2Int(Mathf.RoundToInt(key.x), Mathf.RoundToInt(key.y));
+            //UpdatPlayerPos();
+      }
+      public Tag GetTag() => _tag;
+      public void SetCurrentLevle(Level m_currentLevel) => currentLevel = m_currentLevel;
+      void ReLoadScene() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
       // private void OnGUI()
       // {
       //       GUILayout.BeginHorizontal();

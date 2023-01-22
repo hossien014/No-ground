@@ -9,6 +9,7 @@ TagManager:
   - Leg[R]
   - Leg[L]
   - Rock
+  - CheckPoint
   layers:
   - Default
   - TransparentFX
