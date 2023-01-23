@@ -19,14 +19,16 @@ public class Player : MonoBehaviour, ISaveble
       Tag _tag = Tag.Player;
       [SerializeField] Level currentLevel;
       [SerializeField] Vector2Int m_currentLevelKey;
+      [SerializeField] public TargetJoint2D m_targetJoint;
+      [SerializeField] TargetJoint2D startjoint;
 
       int numberOfHand;
-      [SerializeField] List<GameObject> conectedHands = new List<GameObject>();
+      [SerializeField] public List<GameObject> conectedHands = new List<GameObject>();
 
       private void Update()
       {
             _Utils.reloadScene();
-            if (Input.GetMouseButtonUp(0)) UpdatConectedHandList(null);
+            //if (Input.GetMouseButtonUp(0)) UpdatConectedHandList(t);
       }
       private void Awake()
       {
@@ -38,20 +40,21 @@ public class Player : MonoBehaviour, ISaveble
       }
       private void Start()
       {
-            m_currentLevelKey = FindObjectOfType<LevelManger>().GetCurrentLevel_Key();
+            conectedHands.Add(startjoint.gameObject);
+            //            m_currentLevelKey = FindObjectOfType<LevelManger>().GetCurrentLevel_Key();
             // currentLevel = FindObjectOfType<LevelManger>().GetCurrentLevle(currentLevelKey);
             DragerInitiation();
       }
 
       private void DragerInitiation()
       {
-            UpdatConectedHandList(null);
-            _drager.updateConected += UpdatConectedHandList;
+            //UpdatConectedHandList();
+            //  _drager.updateConected += UpdatConectedHandList;
             _drager.OnDeSelect += ConectHandToRock;
             _drager.OnSelect += (object s, EventArgs e) =>
             {
                   var info = e as SelectInfo;
-                  UpdatConectedHandList(info.Tmep_targetjoint);
+                  // UpdatConectedHandList(info.Tmep_targetjoint);
             };
       }
 
@@ -70,7 +73,8 @@ public class Player : MonoBehaviour, ISaveble
             var rock = GetOverLapRock(info);
             if (!rock) return;
             var rockJoint = info.OverLapedObject.AddComponent<TargetJoint2D>();
-            UpdatConectedHandList(null);
+            conectedHands.Add(rockJoint.gameObject);
+            // UpdatConectedHandList(null);
       }
       void DisConectedRock(object TargetJoint2D_Obj, EventArgs e)
       {
@@ -92,26 +96,46 @@ public class Player : MonoBehaviour, ISaveble
             return Rock;
       }
 
-      void UpdatConectedHandList(TargetJoint2D? Tmpt_joint)
+      public void UpdatConectedHandList(TargetJoint2D? Tmpt_joint)
       {
             int HandCount = 4;
             conectedHands.Clear();
             for (int i = 0; i < HandCount; i++)
             {
-                  var joint = HandList[i].GetComponent<TargetJoint2D>();
+                  var h = HandList[i];
+                  var joint = h.GetComponent<TargetJoint2D>();
                   if (joint == null) continue;
-                  if (joint.Equals(Tmpt_joint)) continue;
-                  conectedHands.Add(HandList[i]);
+                  // if (joint.Equals(t)) continue;
+
             }
             if (conectedHands.Count == 0) { NoConectedSequence(); }
       }
+
+      void UC()
+      {
+
+      }
+      void AJ(Joint2D j2)
+      {
+
+      }
+      // public void removeHand(Joint2D hand)
+      // {
+      //       var tagets = hand.GetComponentsInChildren<TargetJoint2D>();
+      //       foreach (var item in tagets)
+      //       {
+      //             conectedHands.Remove(item.gameObject);
+      //       }
+      //       if (conectedHands.Count == 0) { NoConectedSequence(); }
+      //       //FindObjectOfType<FollowCamra>().DontFollowPlayer();
+
+      // }
 
       private void NoConectedSequence()
       {
             print("you Dead");
             Destroy_Leftover_joint();
             Invoke("ReLoadScene", 1.5f);
-
       }
 
       private void Destroy_Leftover_joint()
@@ -140,10 +164,12 @@ public class Player : MonoBehaviour, ISaveble
       public void SetCurrentLevle(Level m_currentLevel) => currentLevel = m_currentLevel;
       void ReLoadScene() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
-      // private void OnGUI()
-      // {
-      //       GUILayout.BeginHorizontal();
-      //       GUILayout.Box($"{conectedHands.Count} nuber of conetect hands");
-      //       GUILayout.EndHorizontal();
-      // }
+      private void OnGUI()
+      {
+            GUILayout.BeginArea(new Rect(0, 100, 700, 700));
+            GUILayout.BeginHorizontal();
+            GUILayout.Box($"{conectedHands.Count} nuber of conetect hands");
+            GUILayout.EndHorizontal();
+            GUILayout.EndArea();
+      }
 }

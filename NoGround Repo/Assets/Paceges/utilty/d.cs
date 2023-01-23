@@ -35,6 +35,16 @@ namespace Abed.Utils
                         function?.Invoke();
                   }
             }
+            /// <summary>
+            /// if input.Get g key Down
+            ///</summary>
+            public static void gk(Action function)
+            {
+                  if (Input.GetKeyDown(KeyCode.G))
+                  {
+                        function?.Invoke();
+                  }
+            }
 
             /// <summary>
             /// for quie print text 

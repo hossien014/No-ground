@@ -20,9 +20,11 @@ public class Drager : MonoBehaviour
       [SerializeField][Range(0, 100)] float m_frequency = 100;
       [SerializeField] float m_maxForce = 10000;
       [SerializeField] bool DebugLine;
+      [SerializeField] Player _player;
 
       void Update()
       {
+            _player.m_targetJoint = m_targetJoint;
             WorldPos = _Utils.Worldpos2D();
             HoverSensor();
             if (Input.GetMouseButtonDown(0))
@@ -31,10 +33,12 @@ public class Drager : MonoBehaviour
                   if (Physics2D.OverlapPoint(WorldPos, CFilter, contactList) == 0) return;
                   var Overlapcollider = contactList[0];
                   if (!Overlapcollider) return;
-                  Remove_All_TargetsOn(Overlapcollider); updateConected?.Invoke(m_targetJoint);
+                  _player.conectedHands.Remove(Overlapcollider.gameObject);
+                  Remove_All_TargetsOn(Overlapcollider);
+                  updateConected?.Invoke(m_targetJoint);
                   OnSelect?.Invoke(Overlapcollider, new SelectInfo(Overlapcollider.gameObject, Overlapcollider, null, WorldPos));
                   Add_Tempt_TargetJoint(Overlapcollider);
-                  updateConected?.Invoke(m_targetJoint);
+                  //updateConected?.Invoke(m_targetJoint);
             }
             if (Input.GetMouseButtonUp(0))
             {
@@ -49,7 +53,6 @@ public class Drager : MonoBehaviour
                   var body = Overlapcollider.attachedRigidbody;
                   if (!body) return;
                   m_targetJoint = body.gameObject.AddComponent<TargetJoint2D>();
-                  body.GetComponent<Hand>();
                   m_targetJoint.frequency = m_frequency;
                   m_targetJoint.dampingRatio = m_damping;
                   m_targetJoint.maxForce = m_maxForce;
@@ -74,7 +77,10 @@ public class Drager : MonoBehaviour
       private void Remove_Tempt_TargetJoint()
       {
             var leftOver = m_targetJoint.attachedRigidbody.GetComponent<TargetJoint2D>();
-            if (leftOver) Destroy(leftOver);
+            if (leftOver)
+            {
+                  Destroy(leftOver);
+            }
             Destroy(m_targetJoint);
             m_targetJoint = null;
       }
@@ -85,7 +91,7 @@ public class Drager : MonoBehaviour
             if (!overlapCollider) return null;
             OnHover?.Invoke(this, new SelectInfo(overlapCollider.gameObject, overlapCollider, overlapCollider.gameObject.GetComponent<TargetJoint2D>(), WorldPos));
 
-            updateConected?.Invoke(m_targetJoint);
+            //  updateConected?.Invoke(m_targetJoint);
             return overlapCollider;
       }
 
