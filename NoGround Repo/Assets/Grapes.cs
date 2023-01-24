@@ -14,9 +14,15 @@ public class Grapes : MonoBehaviour
       }
       private void OnTriggerEnter2D(Collider2D other)
       {
-            if (other.tag == "player " || other.tag == "player ")
+            if (other.tag == Player.playertag)
             {
-                other
+                  var hands = FindObjectOfType<Player>().Getfinger();
+                  foreach (var hand in hands)
+                  {
+                        print(hand.transform.parent);
+                        hand.transform.GetComponent<HingeJoint2D>().useLimits = false;
+                  }
+                  Destroy(gameObject);
             }
       }
 }
