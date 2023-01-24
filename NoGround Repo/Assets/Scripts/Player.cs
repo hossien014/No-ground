@@ -21,14 +21,18 @@ public class Player : MonoBehaviour, ISaveble
       [SerializeField] Vector2Int m_currentLevelKey;
       [SerializeField] public TargetJoint2D m_targetJoint;
       [SerializeField] TargetJoint2D startjoint;
-
-      int numberOfHand;
       [SerializeField] public List<GameObject> conectedHands = new List<GameObject>();
+      [SerializeField] float p;
 
       private void Update()
       {
+          //  print(_Utils.Sinwave(p, Time.time));
             _Utils.reloadScene();
             //if (Input.GetMouseButtonUp(0)) UpdatConectedHandList(t);
+            if (conectedHands.Count == 0)
+            {
+                  NoConectedSequence();
+            }
       }
       private void Awake()
       {
@@ -111,28 +115,15 @@ public class Player : MonoBehaviour, ISaveble
             if (conectedHands.Count == 0) { NoConectedSequence(); }
       }
 
-      void UC()
+      public void removeHand(GameObject borkenHand)
       {
-
+            conectedHands.Remove(borkenHand);
       }
-      void AJ(Joint2D j2)
-      {
-
-      }
-      // public void removeHand(Joint2D hand)
-      // {
-      //       var tagets = hand.GetComponentsInChildren<TargetJoint2D>();
-      //       foreach (var item in tagets)
-      //       {
-      //             conectedHands.Remove(item.gameObject);
-      //       }
-      //       if (conectedHands.Count == 0) { NoConectedSequence(); }
-      //       //FindObjectOfType<FollowCamra>().DontFollowPlayer();
-
-      // }
 
       private void NoConectedSequence()
       {
+
+            FindObjectOfType<FollowCamra>().PlayerIsDead = true;
             print("you Dead");
             Destroy_Leftover_joint();
             Invoke("ReLoadScene", 1.5f);
@@ -163,7 +154,7 @@ public class Player : MonoBehaviour, ISaveble
       public Tag GetTag() => _tag;
       public void SetCurrentLevle(Level m_currentLevel) => currentLevel = m_currentLevel;
       void ReLoadScene() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
+      
       private void OnGUI()
       {
             GUILayout.BeginArea(new Rect(0, 100, 700, 700));
@@ -172,4 +163,5 @@ public class Player : MonoBehaviour, ISaveble
             GUILayout.EndHorizontal();
             GUILayout.EndArea();
       }
+
 }

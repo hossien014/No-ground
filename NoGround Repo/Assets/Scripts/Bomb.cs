@@ -11,33 +11,28 @@ public class Bomb : MonoBehaviour
       [SerializeField] float Force;
       [SerializeField] float RandomForce = 0;
       [SerializeField] LayerMask layer;
-      private void Update()
+      [SerializeField] string AnimationTriger = "explode";
+      private void OnTriggerEnter2D(Collider2D other)
       {
-            d.gk(() => { explode(); });
-            d.ik(() => { Time.timeScale = 0.6f; });
-            d.pk(() => { Time.timeScale = 1; });
+            if (other.tag == "Player" || other.tag == "Hand")
+            {
+                  GetComponentInChildren<Animator>().SetTrigger(AnimationTriger);
+            }
       }
-
-      private void explode()
+      public void explode()
       {
             var overLapses = Physics2D.OverlapCircleAll(transform.position, Radius, layer);
-            print(overLapses.Length);
             foreach (var item in overLapses)
             {
                   var dirction = item.transform.position - transform.position;
                   var top = _Utils.GetWorldPoint(item.transform, Vector2.up);
                   item.attachedRigidbody.AddForce(dirction.normalized * (Force + Random.Range(0, RandomForce)), ForceMode2D.Impulse);
-
             }
       }
-
-
-      private void OnTriggerEnter2D(Collider2D other)
+      public void destroy()
       {
-            if (other.tag == "Player")
-            {
+            Destroy(gameObject);
 
-            }
       }
       private void OnDrawGizmos()
       {

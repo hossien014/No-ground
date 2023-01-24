@@ -26,6 +26,7 @@ public class FollowCamra : MonoBehaviour
       Vector3 ModifyedPos;
       float current_Frequencey;
       float DistanceFormPlayer;
+      public bool PlayerIsDead = false;
 
       void Start()
       {
@@ -33,8 +34,10 @@ public class FollowCamra : MonoBehaviour
       }
       void Update()
       {
-            if (Application.isEditor)
+            if (!PlayerIsDead)
             {
+
+
                   transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -40);
             }
 

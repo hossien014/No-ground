@@ -278,6 +278,12 @@ namespace Abed.Utils
                   var P_Pos = parent.position;
                   return new Vector3(localPoint.x * scale.x + P_Pos.x, localPoint.y * scale.y + P_Pos.y);
             }
+            public static float Sinwave(float period, float time)
+            {
+                  const float tau = Mathf.PI * 2;
+                  float cycle = time / period;
+                  return Mathf.Sin(tau * cycle);
+            }
       }
 
 
