@@ -15,7 +15,7 @@ public class Player : MonoBehaviour, ISaveble
       [SerializeField] LayerMask HandsLayer = 7;
       [SerializeField] ContactFilter2D RockFilter;
       [SerializeField] GameObject hand_R, hand_L, leg_R, legL;
-      List<GameObject> HandList = new List<GameObject>();
+      [SerializeField] List<GameObject> FingerList = new List<GameObject>();
       Tag _tag = Tag.Player;
       [SerializeField] Level currentLevel;
       [SerializeField] Vector2Int m_currentLevelKey;
@@ -23,12 +23,11 @@ public class Player : MonoBehaviour, ISaveble
       [SerializeField] TargetJoint2D startjoint;
       [SerializeField] public List<GameObject> conectedHands = new List<GameObject>();
       [SerializeField] float p;
-
+      public static string playertag = "Player";
+      public static string Handtag = "Hand";
       private void Update()
       {
-          //  print(_Utils.Sinwave(p, Time.time));
             _Utils.reloadScene();
-            //if (Input.GetMouseButtonUp(0)) UpdatConectedHandList(t);
             if (conectedHands.Count == 0)
             {
                   NoConectedSequence();
@@ -36,36 +35,31 @@ public class Player : MonoBehaviour, ISaveble
       }
       private void Awake()
       {
-            HandList.Add(hand_R);
-            HandList.Add(hand_L);
-            HandList.Add(leg_R);
-            HandList.Add(legL);
+            FingerList.Add(hand_R);
+            FingerList.Add(hand_L);
+            FingerList.Add(leg_R);
+            FingerList.Add(legL);
             _drager = FindObjectOfType<Drager>();
       }
       private void Start()
       {
             conectedHands.Add(startjoint.gameObject);
-            //            m_currentLevelKey = FindObjectOfType<LevelManger>().GetCurrentLevel_Key();
-            // currentLevel = FindObjectOfType<LevelManger>().GetCurrentLevle(currentLevelKey);
             DragerInitiation();
       }
 
       private void DragerInitiation()
       {
-            //UpdatConectedHandList();
-            //  _drager.updateConected += UpdatConectedHandList;
             _drager.OnDeSelect += ConectHandToRock;
             _drager.OnSelect += (object s, EventArgs e) =>
             {
                   var info = e as SelectInfo;
-                  // UpdatConectedHandList(info.Tmep_targetjoint);
             };
       }
 
       //در ابتدای بازی پوزیشن پلیر را  به استارت پونیت می برد
-      public void UpdatPlayerPos(Level p)
+      public void UpdatPlayerPos(Level level)
       {
-            currentLevel = p;
+            currentLevel = level;
             var offset = new Vector3(8.2f, -16.1f);
             var startPos = _Utils.GetWorldPoint(currentLevel.StartNode.transform, offset);
             transform.position = startPos;
@@ -78,7 +72,6 @@ public class Player : MonoBehaviour, ISaveble
             if (!rock) return;
             var rockJoint = info.OverLapedObject.AddComponent<TargetJoint2D>();
             conectedHands.Add(rockJoint.gameObject);
-            // UpdatConectedHandList(null);
       }
       void DisConectedRock(object TargetJoint2D_Obj, EventArgs e)
       {
@@ -99,30 +92,12 @@ public class Player : MonoBehaviour, ISaveble
             Collider2D Rock = ListOfOverlapColliders[0];
             return Rock;
       }
-
-      public void UpdatConectedHandList(TargetJoint2D? Tmpt_joint)
-      {
-            int HandCount = 4;
-            conectedHands.Clear();
-            for (int i = 0; i < HandCount; i++)
-            {
-                  var h = HandList[i];
-                  var joint = h.GetComponent<TargetJoint2D>();
-                  if (joint == null) continue;
-                  // if (joint.Equals(t)) continue;
-
-            }
-            if (conectedHands.Count == 0) { NoConectedSequence(); }
-      }
-
       public void removeHand(GameObject borkenHand)
       {
             conectedHands.Remove(borkenHand);
       }
-
       private void NoConectedSequence()
       {
-
             FindObjectOfType<FollowCamra>().PlayerIsDead = true;
             print("you Dead");
             Destroy_Leftover_joint();
@@ -132,7 +107,7 @@ public class Player : MonoBehaviour, ISaveble
       private void Destroy_Leftover_joint()
       {
             FindObjectOfType<Drager>().enabled = false;
-            foreach (var hand in HandList)
+            foreach (var hand in FingerList)
             {
                   Destroy(hand.GetComponent<TargetJoint2D>());
             }
@@ -154,7 +129,7 @@ public class Player : MonoBehaviour, ISaveble
       public Tag GetTag() => _tag;
       public void SetCurrentLevle(Level m_currentLevel) => currentLevel = m_currentLevel;
       void ReLoadScene() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-      
+      public List<GameObject> Getfinger() => FingerList;
       private void OnGUI()
       {
             GUILayout.BeginArea(new Rect(0, 100, 700, 700));
