@@ -14,8 +14,9 @@ public class Player : MonoBehaviour, ISaveble
 
       [SerializeField] LayerMask HandsLayer = 7;
       [SerializeField] ContactFilter2D RockFilter;
-      [SerializeField] GameObject hand_R, hand_L, leg_R, legL;
+      //[SerializeField] GameObject hand_R, hand_L, leg_R, legL;
       [SerializeField] List<GameObject> FingerList = new List<GameObject>();
+      [SerializeField] List<GameObject> HandList = new List<GameObject>();
       Tag _tag = Tag.Player;
       [SerializeField] Level currentLevel;
       [SerializeField] Vector2Int m_currentLevelKey;
@@ -24,7 +25,6 @@ public class Player : MonoBehaviour, ISaveble
       [SerializeField] public List<GameObject> conectedHands = new List<GameObject>();
       [SerializeField] float p;
       public static string playertag = "Player";
-      public static string Handtag = "Hand";
       private void Update()
       {
             _Utils.reloadScene();
@@ -35,10 +35,10 @@ public class Player : MonoBehaviour, ISaveble
       }
       private void Awake()
       {
-            FingerList.Add(hand_R);
-            FingerList.Add(hand_L);
-            FingerList.Add(leg_R);
-            FingerList.Add(legL);
+            //  FingerList.Add(hand_R);
+            // FingerList.Add(hand_L);
+            //  FingerList.Add(leg_R);
+            //  FingerList.Add(legL);
             _drager = FindObjectOfType<Drager>();
       }
       private void Start()
@@ -130,13 +130,14 @@ public class Player : MonoBehaviour, ISaveble
       public void SetCurrentLevle(Level m_currentLevel) => currentLevel = m_currentLevel;
       void ReLoadScene() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
       public List<GameObject> Getfinger() => FingerList;
+      public List<GameObject> GetHands() => HandList;
       private void OnGUI()
       {
-            GUILayout.BeginArea(new Rect(0, 100, 700, 700));
-            GUILayout.BeginHorizontal();
-            GUILayout.Box($"{conectedHands.Count} nuber of conetect hands");
-            GUILayout.EndHorizontal();
-            GUILayout.EndArea();
+            // GUILayout.BeginArea(new Rect(0, 100, 700, 700));
+            // GUILayout.BeginHorizontal();
+            // GUILayout.Box($"{conectedHands.Count} nuber of conetect hands");
+            // GUILayout.EndHorizontal();
+            // GUILayout.EndArea();
       }
 
 }

@@ -1,20 +1,13 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 namespace SinAnimation
 {
-      public class SinAnimations
+      public class SinAnimations : SinTool
       {
             [SerializeField] AnimationType m_AnimationType;
-            float m_Sinwave;
-            public const float tua = Mathf.PI * 2f;
-            ///<summary>
-            /// یک موج عدد بین -1 تا 1 در هر پریود می سازد
-            ///<summary>
-            public float sinWave(float time, float Period)
-            {
-                  var Cycle = time / Period;
-                  m_Sinwave = Mathf.Sin(tua * Cycle);
-                  return m_Sinwave;
-            }
+
             ///<summary>
             ///  اسکیل ابجکت را به صورت مداوم کم و زیاد می کند
             ///</summary>
@@ -39,6 +32,47 @@ namespace SinAnimation
                   var wave = sinWave(Time.time, period);
                   obj.transform.position += new Vector3(MovmentRange.x * wave * Time.deltaTime, MovmentRange.y * wave * Time.deltaTime, MovmentRange.z * wave * Time.deltaTime);
             }
+            ///<summary> 
+            ///افکت ظاهر شدن ودر زمان تائین شده و سپس اجرای کال بک
+            ///</summary> 
+            public IEnumerator FadeIn(GameObject Obj, float FadeTime, float maxAlpha)
+            {
+                  var sr = Obj.GetComponent<SpriteRenderer>();
+                  if (!sr) { Debug.Log($"{Obj.name} Should Have Sprite Rendere"); yield break; }
+                  if (maxAlpha > 1 || maxAlpha <= 0) { Debug.Log("Max Alpha Should Be betwen 0.1 And 1 "); yield break; }
+                  Color newcolor = sr.color;
+                  while (newcolor.a < maxAlpha)
+                  {
+                        var totalframeInTime = FadeTime / Time.deltaTime;
+                        var EveyFramShareValue = maxAlpha / totalframeInTime;
+                        newcolor.a += EveyFramShareValue;
+                        sr.color = newcolor;
+                        yield return null;
+                  }
+            }
+            ///<summary> 
+            ///افکت محو شدن ودر زمان تائین شده و سپس اجرای کال بک
+            ///</summary> 
+            public IEnumerator FadeOut(GameObject Obj, float FadeTime, float LowestAlpha, Action Callback)
+            {
+                  var sr = Obj.GetComponent<SpriteRenderer>();
+                  if (!sr) { Debug.Log($"{Obj.name} Should Have Sprite Rendere"); yield break; }
+                  if (LowestAlpha > 1 || LowestAlpha < 0) { Debug.Log("Max Alpha Should Be betwen 0.1 And 1 "); yield break; }
+                  Color newcolor = sr.color;
+                  float maxAlpha = newcolor.a;
+                  while (newcolor.a > LowestAlpha)
+                  {
+                        var totalframeInTime = FadeTime / Time.deltaTime;
+                        var EveyFramShareValue = maxAlpha / totalframeInTime;
+                        newcolor.a -= EveyFramShareValue;
+                        sr.color = newcolor;
+                        Debug.Log(newcolor.a);
+                        yield return null;
+                  }
+                  Callback?.Invoke();
+            }
       }
+
+
       public enum AnimationType { Scale };
 }
