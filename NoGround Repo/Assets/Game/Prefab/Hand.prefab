@@ -300,6 +300,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca91d79501106324780793aa4512b9cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  partSet: {fileID: 0}
+  ForAram: {fileID: 6898420279347162417}
+  Fingers: {fileID: 849524091048531653}
 --- !u!1 &4123266204765758812
 GameObject:
   m_ObjectHideFlags: 0

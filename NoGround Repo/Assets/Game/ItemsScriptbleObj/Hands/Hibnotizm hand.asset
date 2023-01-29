@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c093f3552e9857e45bb3ac4d358bd5a1, type: 3}
+  m_Name: Hibnotizm hand
+  m_EditorClassIdentifier: 
+  EnableColliton: 1
+  useLimits: 1
+  AngleLimte:
+    Min: -800
+    Max: 800
+  BrackForce: Infinity
+  BrackTorqe: Infinity
+  useMotor: 0
+  MotorSpeed: 0
+  MaximumMotorForce: 10000
+  physicsMaterial: {fileID: 0}
+  Mass: 2
+  Drag: 1
+  AnglarDrage: 1
+  GravityScale: 10
+  constraints: 0

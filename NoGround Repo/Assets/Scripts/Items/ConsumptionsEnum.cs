@@ -1,0 +1,1 @@
+public enum consumption { Empty, Grapes, Bottle, Apple, WeakArem };
